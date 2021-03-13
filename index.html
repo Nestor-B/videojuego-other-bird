@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<title>OTHER BIRD</title>
+		<style>
+			*{margin: 0;padding: 0;box-sizing: border-box;user-select: none;z-index: 1;list-style: none;}
+			body{overflow: hidden;max-width: 100%;width: 100%;background: linear-gradient(lightblue, white);transform:scale(1);border:5px dashed green;max-height:100vh;}/*#151515*/
+			#app{
+				height: 100vh;position: relative;background-image: url(./paisaje.png);background-repeat: repeat-x;background-position:  0px 100%;background-size: 100px 100px;cursor: pointer;overflow: hidden;}
+			#app #bird{width: 66px;height: 47px;position: absolute;left: 20%;top: calc(50% - 30px);transition: 150ms;background: url(./bird.png);z-index: 2;}
+			#app .bloque{
+				position: absolute;
+				width: 122px;
+				background: url(./column.png);
+				background-repeat: repeat-y;
+				background-size: cover;
+				border: 1px solid #c90e35;
+			}
+			#app .puntos{position: absolute;width: 400px;height: 400px;border-radius: 50%;bottom: calc(50% - 200px);right: calc(50% - 200px);display: flex;justify-content: center;align-items: center;flex-direction: column; z-index: 11;font-size: 5em;color: #155515;font-weight: bolder;text-shadow: 0 1px 1px white, 1px 1px #000;}
+			
+			.anime_puntos{animation: bounceIn 777ms linear;}
+			.moverP{
+				animation: moveP 15s infinite linear;
+			}
+			@keyframes moveP{
+				to{
+					  background-position: -100px 100%;
+				}
+			}
+			@keyframes bird{
+				to{background-position: 200px 0;}
+			}
+			@keyframes bounceIn{0%,20%,40%,60%,80%,to{-webkit-animation-timing-function:cubic-bezier(.215,.61,.355,1);animation-timing-function:cubic-bezier(.215,.61,.355,1)}0%{opacity:0;-webkit-transform:scale3d(.3,.3,.3);transform:scale3d(.3,.3,.3)}20%{-webkit-transform:scale3d(1.1,1.1,1.1);transform:scale3d(1.1,1.1,1.1)}40%{-webkit-transform:scale3d(.22,.22,.22);transform:scale3d(.9,.9,.9)}60%{opacity:1;-webkit-transform:scale3d(1.03,1.03,1.03);transform:scale3d(1.03,1.03,1.03)}80%{-webkit-transform:scale3d(.97,.97,.97);transform:scale3d(.97,.97,.97)}to{opacity:1;-webkit-transform:scaleX(1);transform:scaleX(1)}}
+			
+			.radar {
+			   position: absolute;
+			   z-index: 13;
+			   top: 50%;
+			   text-align:center;
+			   display:flex;
+			   justify-content:center;
+			   align-items:center;
+			   font-size:2em;
+			   color:green;
+			   left: 50%;
+			   border-radius: 50%;
+			   border: 10px solid #fff;
+			   width: 150px;
+			   height: 150px;
+			   -webkit-transform: translate(-50%,-50%);
+			   transform: translate(-50%,-50%);
+			   -webkit-animation: radar 2s infinite;
+			   animation: radar 2s infinite;
+			   opacity: 0;
+			}			
+			
+			@keyframes radar{
+				0%{
+				    width:75px;
+				    height:75px;
+				    border:40px 
+				    solid #fff;
+				    opacity:0
+				}50%{
+				    opacity:.3
+				}
+				90%{
+				    width:250px;
+				    height:250px
+				}
+				90%,100%{
+				    border:2px 
+				    solid #fff;
+				    opacity:0
+				}100%{
+				    width:500px;
+				    height:500px
+				}
+			}
+
+			@media (orientation: portrait) {
+				#app, .radar{display: none;}
+				body:after {
+					background: #151515;
+					content: "Gira la pantalla";
+					width: 100%;
+					height: 100%;
+					color: red;
+					word-wrap: break-word;
+					font-size: 3.3em;
+					position: fixed;
+					z-index: 10;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					text-align: center;
+					font-family: monospace;
+				}
+			}
+			.radar:nth-child(2) {
+		    	animation-delay: .4s;
+			}
+			.radar:nth-child(3) {
+			    animation-delay: .9s;
+			}
+			.radar:nth-child(4) {
+			    animation-delay: .15s;
+			}
+			@media (orientation: landscape) {
+				* {
+					/**/
+				}
+			}
+			@media (max-width: 700px){
+				body{transform:scale(1);border:1px groove #ccc;}
+			}
+			
+			.modal{
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				background: rgba(0,0,0,0.5);
+				z-index: 17;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			.modal .content{
+				max-width: 400px;
+				width: 400px;
+				background: white;
+				min-height: 200px;
+				padding: 1em;
+				box-shadow: 5px 5px 5px rgba(0,0,0,.5);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+			}
+			.modal .content button{
+				margin: 15px 0;
+				border: 0;
+				padding: 15px 1.5em;
+				background: #2196f3;
+				color: #fff;
+				border-radius: 10px;
+				width: 50%;
+				font-weight: bold;
+				cursor: pointer;
+			}
+			.modal .content p{
+				text-align: center;
+			}
+			.modal .content h1{
+				margin: 1em;
+			}
+			#psavedf{
+				padding: 2em;
+				position: fixed;
+				top: 5px;
+				left: 5px;
+				z-index: 15;
+			}
+			
+		</style>
+	</head>
+	<body oncontextmenu="return false">
+		<p id="psavedf"></p>
+		
+		<div class="radar">Touch</div>
+		<div class="radar"></div>
+		<div class="radar">Toca</div>
+		<div class="radar"></div>		
+		
+		<div id="modal" class="modal">
+			<div class="content">
+				<h1 align="center">OTHER BIRD</h1>
+				<h3>Instrucciones</h3>
+				<div style="padding: 5px 0;margin-top: 5px;text-align: center;">
+					<small>Manten presionado <br>
+						<b>Click</b> para volar.
+					</small>
+				</div>
+				<button id="btn_iniciar">Jugar</button>
+				<p id="psaved"></p>
+				<p>&nbsp;</p>
+			</div>
+		</div>
+		
+		<div id="app">
+			<div id="bird"></div>
+		</div>
+		
+		<script>
+			//172 124
+			var w   = window
+			var d   = document
+			//
+			var iw  = innerWidth 
+			var ih  = innerHeight 
+			//
+			var si_s = null
+			var si_b = null
+			var si_a = null
+			var si_c = null
+			var si_m = null			
+			var si_p = null			
+			var si_cb = null
+			
+			score = 1			
+			
+			var act = false
+			var y=true
+			function subir()
+			{
+				if ( y ) {
+					if ( bird.offsetTop > bird.offsetHeight ) {
+						bird.style.top = ( --bird.offsetTop-bird.offsetHeight ) +'px'
+						bird.style.transform = "rotate(-15deg)"
+					}
+				}
+			}
+			function bajar(){
+				if ( !y ) {
+					if ( bird.offsetTop < ih - ( bird.offsetHeight ) ) {
+						bird.style.top = ( ++bird.offsetTop+bird.offsetHeight ) +'px'
+						bird.style.transform = "rotate(15deg)"
+					}	
+				}
+				if( bird.offsetTop > ih - ( bird.offsetHeight ) ){
+					//Caiste => Perdiste
+					Perdiste()
+				}
+			}
+			
+			var Vibrar = false
+			function Perdiste(){
+				if (!Vibrar) {
+					var c = new Audio("./choque.mp3")
+					c.play()
+					//--
+					window.navigator.vibrate(200)
+					Vibrar = true
+				}
+				
+				d.querySelectorAll(".radar").forEach((e)=>{
+					//d.body.removeChild(e)
+					e.style.display = "flex"
+					e.style.top = "50%"
+					e.style.left = "calc(20% + 33px)"
+					e.innerText = ""
+				})
+				
+				//app.classList.remove("moverP")
+				
+				if (d.querySelector("#puntos")) {
+					puntos.style.color = "red"
+					score = 1
+				}
+				
+				app.style.animationPlayState="paused"			
+				d.removeEventListener("mousedown", fsubir)
+				d.removeEventListener("touchstart", fsubir)
+				
+				clearTimeout(si_a, 0)
+				clearTimeout(si_s, 0)
+				clearTimeout(si_b, 0)
+				clearTimeout(si_c, 0)
+				clearTimeout(si_m, 0)
+				clearTimeout(si_p, 0)
+				clearTimeout(si_cb, 0)
+				bird.style.filter = "grayscale(100%)"
+				//modal.style.display = "flex"
+				Vibrar = false
+				act = false
+				y = true
+				
+				d.querySelectorAll(".bloque").forEach((e)=>{
+					app.removeChild(e)
+				}, 100)
+
+				bird.style.transform = "rotate(0deg)"
+				bird.style.filter = "grayscale(0%)"
+				cargar()
+				/*
+				if ( confirm("\t Has perdido. \n\r¿Deseas reiniciar el juego?") ) {
+					//location.reload()
+					Vibrar = false
+					act = false
+					score = 1
+					d.querySelectorAll(".bloque").forEach((e)=>{
+						app.removeChild(e)
+					}, 100)
+					
+					bird.style.transform = "rotate(0deg)"
+					bird.style.filter = "grayscale(0%)"
+					cargar()
+					//C()
+				}
+				*/
+			}
+			
+			function getRandomInt(min, max)
+			{
+				return Math.floor(Math.random() * (max - min)) + min;
+			}
+			
+			var I = 0
+			function crearBloques(){
+				var b = d.createElement("div")
+				app.style.animationPlayState="running"
+				b.classList.add("bloque")
+				b.style.left = innerWidth + 'px'
+				if ( innerWidth < 600 ) {
+					if ( I%2 == 0 ) {
+						b.style.top = "0px"
+						b.style.height = (getRandomInt(10, 50))+"vh"
+					} else {
+						b.style.bottom = "0%"
+						b.style.height = (getRandomInt(10, 60))+"vh"
+					}					
+				}else{
+					if ( I%2 == 0 ) {
+						b.style.top = "0px"
+						b.style.height = (getRandomInt(30, 70))+"vh"
+					} else {
+						b.style.bottom = "0%"
+						b.style.height = (getRandomInt(30, 70))+"vh"
+					}					
+				}
+				app.appendChild(b)
+				I++
+				
+				si_c = setTimeout( crearBloques, 1495 )
+			}
+			
+			function moverBloques(){
+				var b = d.querySelectorAll(".bloque")
+				b.forEach((e)=>{
+					e.style.left = (--e.offsetLeft - 20) +'px'
+					if (e.offsetLeft < -e.offsetWidth) {
+						app.removeChild(e)
+					}
+					if (e.offsetLeft < bird.offsetLeft - bird.offsetWidth) {
+						puntos.classList.add("anime_puntos")
+					}
+				})
+				si_m = setTimeout( moverBloques, 50 )
+			}
+			function ColisionBloques()
+			{
+				var b = d.querySelectorAll(".bloque")
+				b.forEach((e)=>{
+					if ( bird.offsetLeft >= e.offsetLeft - (bird.offsetWidth) && bird.offsetLeft <= e.offsetLeft + e.offsetWidth-10 && bird.offsetTop >= e.offsetTop - bird.offsetHeight && bird.offsetTop <= e.offsetTop + e.offsetHeight ) {
+						bird.style.top = bird.offsetTop + 'px'
+						bird.style.left = bird.offsetLeft + 'px'
+						si_p = setInterval(Perdiste, 1)
+					}
+				})
+				si_cb = setTimeout( ColisionBloques, 1 )
+			}		
+			
+			function salvado(e){
+				if ( localStorage.getItem("P") < e ) {
+					localStorage.setItem("P", e-1)	
+				}
+			}
+			function C(){
+				app.classList.add("moverP")
+				//Bloques
+				crearBloques()
+				//moverBloques
+				moverBloques()
+				//colision
+				ColisionBloques()
+				//puntos
+				var p = d.createElement("div")
+				p.innerText = ""
+				p.classList.add("puntos")
+				p.id = "puntos"
+				p.addEventListener("animationstart", ()=>{
+					puntos.style.color = "#155515"
+				})
+				p.addEventListener("animationend", ()=>{
+					puntos.innerHTML = `
+						<small style='font-size:12px;color:#151515;'>score</small>
+						<div>`+(score++)+`</div>
+					`
+					//salved
+					salvado(score)					
+					puntos.classList.remove("anime_puntos")
+				})
+				app.appendChild(p)
+				
+				d.querySelectorAll(".radar").forEach((e)=>{
+					//d.body.removeChild(e)
+					e.style.display = "none"
+				})
+			}
+			
+			function fsubir(e = null){
+				y = true
+				if (localStorage.getItem("P") !== null) {
+					psavedf.innerHTML = "Mis Puntos Maximos <b>"+localStorage.getItem("P")+"</b> "
+				}
+				
+				si_s = setInterval(subir,100)
+				
+				bird.style.animation = "bird 200ms steps(3) infinite"
+				var c = new Audio("./subir.mp3")
+				c.play()
+
+				if (!act) {
+					act = true
+					si_a = setTimeout(C, 2500)
+				}
+				clearInterval(si_b, 0)
+			}
+			function fbajar()
+			{
+				y = false
+				clearInterval(si_s, 0)
+				si_b = setInterval(bajar,100)
+
+				bird.style.animation = "bird 222ms"	
+			}
+			
+			var si_tend = null
+			function cargar(){
+				bird.style.top = "calc(50% - 30px)"
+				bird.style.left = "20%"
+				//app.style.backgroundSize = innerWidth+"px auto"
+				//app.style.backgroundPosition = "1px 0px"
+				
+				//control
+				d.addEventListener("mousedown", fsubir)
+				d.addEventListener("mouseup", fbajar)
+				//------------
+				//control
+				d.addEventListener("touchmove", ()=>{
+					console.log("Subir")
+					bird.style.top = ( --bird.offsetTop-bird.offsetHeight ) +'px'
+					clearInterval(si_tend, 1)
+				})
+				d.addEventListener("touchend", ()=>{
+					si_tend = setInterval(()=>{
+						bird.style.top = ( ++bird.offsetTop+bird.offsetHeight ) +'px'
+					}, 500)
+				})
+			
+				//control
+				d.addEventListener("keydown", ()=>{
+					
+					if (event.keyCode == 38) {
+						fsubir(true)
+					}
+					
+				})
+				d.addEventListener("keyup", fbajar)		
+				
+				if (localStorage.getItem("P") !== null) {
+					psavedf.innerHTML = "Mis Puntos Maximos <b>"+localStorage.getItem("P")+"</b> "	
+				}
+			}
+			w.addEventListener("load", ()=>{
+				btn_iniciar.addEventListener("click", ()=>{
+					event.stopPropagation()
+					modal.style.display = "none"
+					cargar()
+				})
+				if (localStorage.getItem("P") !== null) {					
+					psaved.innerHTML = "Puntos maximos salvados: <b>"+(localStorage.getItem("P"))+"</b>p"			
+				}
+			})
+		</script>
+		
+	</body>
+</html>
